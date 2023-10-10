@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+
+      <script type="module">
+          // Import the functions you need from the SDKs you need
+          import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+          import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-analytics.js";
+          // TODO: Add SDKs for Firebase products that you want to use
+          // https://firebase.google.com/docs/web/setup#available-libraries
+        
+          // Your web app's Firebase configuration
+          // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+          
+      </script>
+      <title>7D+ login</title>
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="title">7D+ Signup</h1>
+            <div class="card">
+                <div id="form">
+                    <input type="email" placeholder="Email" id="email">
+                    <input type="text" placeholder="Username" id="username">
+                    <input type="password" placeholder="Password" id="password">
+                    <center>
+                        <button onclick="signup()">Sign up</button>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+const firebaseConfig = {
+        apiKey: "AIzaSyDdFScIQmSXRjr9Scx8ItcYZAd0KW-ha68",
+        authDomain: "dplus-41108.firebaseapp.com",
+        projectId: "dplus-41108",
+        storageBucket: "dplus-41108.appspot.com",
+        messagingSenderId: "1027127970741",
+        appId: "1:1027127970741:web:afb0ba337bc1b953f6a7fc",
+        measurementId: "G-38DZ5DW0EJ"
+      };
+const passhashed = "134e04412ac0ab72e6d30f49fe086964";
+      // Initialize Firebasefirebase.initializeApp(firebaseConfig);
+      const firebaseApp = firebase.initializeApp(firebaseConfig);
+      const db = firebaseApp.firestore(); // Initialize Firestore
+function signup() {
+  var email = document.getElementById('email').value; // Get email from your form input
+  var password = document.getElementById('password').value; // Get password from your form input
+  var username = document.getElementById('username').value; // Get username from your form input
+  var created = new Date();
+  var logins = [];
+  const card = document.querySelector('.card')
+
+  firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(function(userCredential) {
+      var user = userCredential.user;
+      // Send email verification
+      user.sendEmailVerification().then(function() {
+        // Email sent.
+        console.log("Verification email sent!");
+        card.innerHTML = `<center><h3>Please check your email to confirm your email adress</h3></center>`;
+      }).catch(function(error) {
+        // An error happened.
+        console.error("Error sending verification email: ", error);
+        card.innerHTML = `<center><h3>Error: ${error}</h3></center>`;
+      });
+
+      // Add user data to Firestore collection
+      db.collection("users").doc(user.uid).set({
+        email: email,
+        username: username,
+        password: password,
+        created: created,
+        logins: logins
+      })
+      .then(function() {
+        console.log("User data added to Firestore!");
+      })
+      .catch(function(error) {
+        console.error("Error adding user data: ", error);
+      });
+    })
+    .catch(function(error) {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.error("Error creating user: ", errorMessage);
+    });
+}
+</script>
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #0f0f1a;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.card {
+  width: 300px;
+  background-color: #1e213a;
+  padding: 20px;
+  border-radius: 10px;
+  border-top: 4px solid #19d4ca;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+#form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input {
+  padding: 10px;
+  border: none;
+  background-color: transparent;
+  border-bottom: 1px solid #ccc;
+  color: #fff;
+  transition: box-shadow 0.3s;
+}
+
+input:focus {
+  box-shadow: 0 0 10px #19d4ca;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.login-button,
+.register-link {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
+  text-decoration: none;
+}
+
+.login-button {
+  background-color: transparent;
+  color: #19d4ca;
+}
+
+.login-button:hover {
+  background-color: #19d4ca;
+  color: #fff;
+  box-shadow: none;
+}
+
+.login-button:active {
+  box-shadow: 0 0 10px #19d4ca;
+}
+
+.register-link {
+  color: #ccc;
+  background-color: transparent;
+}
+
+.register-link:hover {
+  color: #fff;
+}
+
+.register-link:active {
+  box-shadow: 0 0 10px #ccc;
+}
+
+@media (max-width: 480px) {
+  .card {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+button{
+    background: rgba(0, 0, 0, 0.0);
+    border: none;
+    font-size: 18px;
+    color: rgb(59, 138, 216);
+}
+</style>

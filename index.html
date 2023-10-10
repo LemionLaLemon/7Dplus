@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+      <link rel="stylesheet" href="dark_mode.css" id="stylesheet">
+      <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/favicon.ico?alt=media&token=30a65c76-0379-471a-9846-002c00d3446c&_gl=1*16mtdvn*_ga*MTE5MjkyMDYwMi4xNjk2NzM1MjM1*_ga_CW55HF8NVT*MTY5Njc0NjQ4NS4yLjEuMTY5Njc0OTk5OC42MC4wLjA.">
+      <title>7D+</title>
+  </head>
+  <div id="rowflex">
+    <aside>
+      <div id="centerx">
+        <div class="button" id="webthemes" onclick="switchThemes();" title="Switch themes"></div>
+      </div>
+      <div style="position: absolute; bottom: 1em; width: 4em; height: 4em;" onclick="accountMenu()">
+        <div style="flex-direction: column;">
+          <center>
+            <div class="user"><span style="font-size: 28px;">?</span></div>
+            <span>Me</span>
+          </center>
+        </div>
+      </div>
+    </aside>
+    <main>
+        <center><h1>7D plus</h1></center>
+        <center><h3>The platform for !{ERROR}</h3></center>
+        <hr width="45%">
+        <br>
+          <div style="display: flex; flex-direction: row; justify-content: center;">
+              <div class="button" onclick="openSignupForm()">Sign up</div>
+              <div class="button" onclick="alert('Cannot find script...')">Log in</div>
+          </div>
+    </main>
+  </div>
+<div id="usermenu" class="hidden">
+
+</div>
+<script>
+  const setmode = document.getElementById('stylesheet');
+  const themebutton = document.getElementById('webthemes');
+  const lightbutton = `<img src="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/brightness.png?alt=media&token=470052b1-4073-486a-bc31-7174b43143e1&_gl=1*n7joeq*_ga*MTE5MjkyMDYwMi4xNjk2NzM1MjM1*_ga_CW55HF8NVT*MTY5Njc0NjQ4NS4yLjEuMTY5Njc0OTk1My4zNi4wLjA." title="Light mode" id="themeimg"></img>`;
+  const darkbutton = `<img src="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/moon.png?alt=media&token=8124b6de-6a2d-436e-9d9e-b291e7ce6d35&_gl=1*hlz1b7*_ga*MTE5MjkyMDYwMi4xNjk2NzM1MjM1*_ga_CW55HF8NVT*MTY5Njc0NjQ4NS4yLjEuMTY5Njc0OTk4NC41LjAuMA.." title="Dark mode" id="themeimg"></img>`;
+  let currenttheme = 'dark'  
+  themebutton.innerHTML = lightbutton;
+  setmode.href = 'dark_mode.css';
+
+  function switchThemes(){
+    if (currenttheme == 'dark'){
+      currenttheme = 'light';
+      themebutton.innerHTML = darkbutton;
+      setmode.href = 'light_mode.css';
+    }
+    else if(currenttheme == 'light'){
+      currenttheme = 'dark';
+      themebutton.innerHTML = lightbutton;
+      setmode.href = 'dark_mode.css';
+    }
+  }
+</script>
+<script>
+function openSignupForm() {
+  var loginWindow = window.open('signup.html', '_blank', 'width=400,height=300');
+}
+</script>
+</html>
