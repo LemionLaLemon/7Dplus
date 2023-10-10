@@ -4,7 +4,7 @@
       <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
       <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
       <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
-
+      <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
       <script type="module">
           // Import the functions you need from the SDKs you need
           import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
@@ -23,9 +23,14 @@
             <h1 class="title">7D+ Signup</h1>
             <div class="card">
                 <div id="form">
-                    <input type="email" placeholder="Email" id="email">
-                    <input type="text" placeholder="Username" id="username">
-                    <input type="password" placeholder="Password" id="password">
+                    <input type="email" placeholder="Email" id="email" required>
+                    <input type="text" placeholder="Username" id="username" required>
+                    <input type="password" placeholder="Password" id="password" required>
+                    <label for="profilePicture" class="custom-file-upload">
+                      Choose a profile picture
+                  </label>
+                  <input type="file" id="profilePicture" class="file-input" required>
+                  
                     <center>
                         <button onclick="signup()">Sign up</button>
                     </center>
@@ -47,50 +52,66 @@ const firebaseConfig = {
 const passhashed = "134e04412ac0ab72e6d30f49fe086964";
       // Initialize Firebasefirebase.initializeApp(firebaseConfig);
       const firebaseApp = firebase.initializeApp(firebaseConfig);
+      const storage = firebaseApp.storage();
       const db = firebaseApp.firestore(); // Initialize Firestore
-function signup() {
-  var email = document.getElementById('email').value; // Get email from your form input
-  var password = document.getElementById('password').value; // Get password from your form input
-  var username = document.getElementById('username').value; // Get username from your form input
-  var created = new Date();
-  var logins = [];
-  const card = document.querySelector('.card')
 
-  firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then(function(userCredential) {
-      var user = userCredential.user;
-      // Send email verification
-      user.sendEmailVerification().then(function() {
+
+      function signup() {
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+    var username = document.getElementById('username').value;
+    var created = new Date();
+    var logins = [];
+    const card = document.querySelector('.card');
+    var profilePicture = document.getElementById('profilePicture').files[0]; // Get the selected profile picture file
+
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(function(userCredential) {
+            var user = userCredential.user;
+          
+
+            // Send email verification
+        user.sendEmailVerification().then(function() {
         // Email sent.
         console.log("Verification email sent!");
         card.innerHTML = `<center><h3>Please check your email to confirm your email adress</h3></center>`;
-      }).catch(function(error) {
-        // An error happened.
-        console.error("Error sending verification email: ", error);
-        card.innerHTML = `<center><h3>Error: ${error}</h3></center>`;
-      });
+        });
 
-      // Add user data to Firestore collection
-      db.collection("users").doc(user.uid).set({
-        email: email,
-        username: username,
-        password: password,
-        created: created,
-        logins: logins
-      })
-      .then(function() {
-        console.log("User data added to Firestore!");
-      })
-      .catch(function(error) {
-        console.error("Error adding user data: ", error);
-      });
-    })
-    .catch(function(error) {
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      console.error("Error creating user: ", errorMessage);
+            // Upload profile picture to Firebase Storage
+            var storageRef = storage.ref('profilePictures/' + user.uid + '/' + profilePicture.name);
+    storageRef.put(profilePicture).then((snapshot) => {
+        console.log('Profile picture uploaded:', snapshot);
+
+        // Get the download URL of the uploaded profile picture
+        storageRef.getDownloadURL().then((downloadURL) => {
+            // Add user data to Firestore collection with the profileImage field
+            db.collection("users").doc(user.uid).set({
+                email: email,
+                username: username,
+                password: password,
+                created: created,
+                logins: logins,
+                profileImage: downloadURL // Store the download URL of the profile picture
+            }).then(function() {
+                
+            }).catch(function(error) {
+              console.error("Error sending verification email: ", error);
+              card.innerHTML = `<center><h3>Error: ${error}</h3></center>`;
+            });
+        }).catch((error) => {
+            console.error('Error getting download URL:', error);
+        });
+    }).catch((error) => {
+        console.error('Error uploading profile picture:', error);
     });
+})
+        .catch(function(error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.error("Error creating user: ", errorMessage);
+        });
 }
+
 </script>
 <style>
 body {
@@ -199,5 +220,17 @@ button{
     border: none;
     font-size: 18px;
     color: rgb(59, 138, 216);
+}
+.custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #243d5a;
+    color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.file-input {
+    display: none;
 }
 </style>
