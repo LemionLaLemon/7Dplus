@@ -1,0 +1,110 @@
+:root {
+    font-family: 'Ubuntu Mono', monospace;
+    overflow: scroll;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(76, 76, 76);
+    color: rgb(0, 0, 0);
+}
+body, html {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(76, 76, 76);
+}
+#title {
+    font-family: 'Oxygen', sans-serif;
+    font-size: 95px;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    margin: 0;
+    margin-left: 5%;
+}
+h1, h2, h3, h4, h5, h6, p, span{
+    z-index: 999;
+}
+.title-container {
+    display: flex;
+    flex-direction: column;
+}
+#name {
+    background-color: rgb(20, 30, 30);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    z-index: 1;
+}
+#explaination{
+    height: fit-content;
+    background: rgb(32,48,48);
+    background: linear-gradient(180deg, rgba(20,30,30,1) 3%, rgb(47, 30, 30) 70%);
+    margin: 0;
+    padding-top: 15px;
+    z-index: 1;
+}
+#p1{
+    margin: 0;
+    margin-left: 5%;
+    color: white;
+    font-size: 35px;
+}
+#p1-a{
+    margin: 0;
+    margin-left: 5%;
+    color: white;
+    font-size: 35px; 
+    opacity: 0;
+}
+#florb, #florb-a{
+  background-color: rgb(255, 255, 255);
+  background-image: linear-gradient(135deg, rgb(44, 120, 187) 20%, rgba(140,42,193,1) 74%);
+  background-size: 100%;
+  background-repeat: repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; 
+  -moz-background-clip: text;
+  background-clip: text;
+  -moz-text-fill-color: transparent;
+  font-size: 50px;
+  margin-right: 0;
+}
+#signup{
+    height: 95vh;
+    background-image: linear-gradient(180deg, rgb(47, 30, 30) 20%, rgb(31, 53, 27) 70%);
+    z-index: 1;
+}
+#p3{
+    margin-top: 0;
+    font-size: 28px;
+    color: white;
+}
+#b1{
+    border: 1px solid black;
+    font-size: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    background-color: rgb(39, 59, 9);
+    margin-left: 15px;
+}
+#b1:hover{
+    border: 1px solid black;
+    font-size: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    background-color: rgb(47, 72, 10);
+    cursor: pointer;
+    margin-left: 15px;
+}
+#explainationimg{
+    width: 100vw;
+    height: auto;
+}
+#p10{
+    margin: 0;
+    margin-left: 3%;
+    color: white;
+    font-size: 35px; 
+}

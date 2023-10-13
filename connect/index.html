@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<!--CSS-->
+<link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="css/app.css">
+<!--Fonts-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxygen&display=swap">
+<html lang="en">
+    <head>
+        <title>7D+ Connect</title>
+        <link rel="icon"
+        href="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/favicon.ico?alt=media&token=30a65c76-0379-471a-9846-002c00d3446c&_gl=1*16mtdvn*_ga*MTE5MjkyMDYwMi4xNjk2NzM1MjM1*_ga_CW55HF8NVT*MTY5Njc0NjQ4NS4yLjEuMTY5Njc0OTk5OC42MC4wLjA.">
+        <meta name="initial-scale">
+        <link rel="stylesheet" href="/dark_mode.css" id="stylesheet">
+    </head>
+    <body>
+        <div id="rowflex">
+        <aside>
+            <div id="centerx">
+                <div class="button tooltip" data-tooltip="Home page" onclick="window.location.replace('/index.html')">
+                    <img
+                        src="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/homepage.png?alt=media&token=2dabae14-6270-4f37-8c19-16ca4e246dc1"
+                        id="themeimg">
+                </div>
+            </div>
+            <div id="centerx">
+                <div class="button tooltip" data-tooltip="About 7D" id="webthemes"
+                    onclick="window.location.replace('/about.html')">
+                    <img
+                        src="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/info.png?alt=media&token=b06d9917-e385-4dd3-9a38-3447ea028d2f"
+                        id="themeimg">
+                </div>
+            </div>
+            <div id="centerx">
+                <div class="button tooltip" data-tooltip="7D+ Connect" id="webthemes" onclick="window.location.replace('/connect/')">
+                  <img src="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/conversation.png?alt=media&token=d79dd41c-b0da-4114-8192-043db4ebb0f8" id="themeimg">
+                </div>
+            </div>
+            <div id="centerx">
+                <div class="button tooltip" data-tooltip="Criminal Records"
+                    onclick="window.location.replace('/criminalrecords.html')">
+                    <img
+                        src="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/criminal-record.png?alt=media&token=a44131f6-563e-4bbb-bf67-6f4bda13662c"
+                        id="themeimg">
+                </div>
+            </div>
+            <div id="userButton" style="position: absolute; bottom: 1em; width: 4em; height: 4em; cursor: pointer;">
+                <div style="flex-direction: column;">
+                    <center>
+                        <div class="user"><span style="font-size: 28px;">?</span></div>
+                        <span>Me</span>
+                    </center>
+                </div>
+            </div>
+        </aside>
+
+
+
+
+
+
+
+
+
+
+
+        <br>
+        <div id="pagecontent">
+            <div id="topstuffs">
+                <div id="fordelete">
+                <div id="ts2">
+                    <center><p>Create a post</p></center>
+                    <hr style="width: 100%; margin-top: -1px;">
+                    <div style="display: flex; flex-direction: row;">
+                        <span style="font-size: 14px; margin-left: 10px;">What are you thinking about, </span>
+                        <span class="currentuser" style="font-size: 14px; margin-left: 0.5em;"></span>
+                    </div>
+                    <div>
+                    <!--normal post-->
+                    <br>
+                        <textarea placeholder="Donald trump lol" class="thought" rows="1" id="inputtitle"required></textarea>
+                        <textarea placeholder="Trump is as fatty!"  id="inputtext" class="thought" rows="2" required></textarea>
+                        <br>
+                        <div id="border-only">
+                            <div id="optionsContainer">
+                            <input type="text" placeholder="Option 1" id="choiceinput" class="1">
+                            </div>
+                            <div id="add_remove">
+                            <button class="add_option">Add an option</button>
+                            <button class="remove_option">Remove last option</button>
+                        </div>
+                        </div>
+                        <center><input type="submit" class="submit" value="Post" onclick="post()"></center>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <p style="font-size: 28px;"></p><!--so that the <p> on the next line will be aligned properly-->
+            <div id="posts" style="overflow-y: scroll;">
+                <!--FIREBASE!-->
+            </div>
+    </div>
+    </body>
+</div>
+<div id="usermenu" class="hidden">
+    <button onclick="logout()" style="border: none; border-bottom: 2px solid black; width: 100%; height: 2em; background-color: rgba(84, 84, 84, 0.777); cursor: pointer; border-top-right-radius: 15px;">Log out</button>
+  </div>
+</html>
+
+<!-- Include Firebase and Firestore scripts -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+<!-- Your app.js script -->
+<script>
+const firebaseConfig = {
+        apiKey: "AIzaSyDdFScIQmSXRjr9Scx8ItcYZAd0KW-ha68",
+        authDomain: "dplus-41108.firebaseapp.com",
+        projectId: "dplus-41108",
+        storageBucket: "dplus-41108.appspot.com",
+        messagingSenderId: "1027127970741",
+        appId: "1:1027127970741:web:afb0ba337bc1b953f6a7fc",
+        measurementId: "G-38DZ5DW0EJ"
+};
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+function getCookie(name) {
+    const cookieValue = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
+    return cookieValue ? cookieValue.pop() : null;
+}
+    function logout(){
+      auth.signOut().then(() => {
+        document.cookie = 'username=; expires=Thu, 01 Jan 1970 10:10:10 UTC; path=/;';
+        document.cookie = 'profileURL=; expires=Thu, 01 Jan 1970 10:10:10 UTC; path=/;';
+        window.location.reload();
+        }).catch((error) => {
+            alert('A bug ate the function. Try again later.');
+        });
+    }
+    function deleteThis(){
+        
+    }
+const whatuser = getCookie('username');
+
+if (!whatuser){
+    const toDelete = document.querySelector("#fordelete");
+    toDelete.innerHTML = '<h1 style="color: white;">Please log in from the home page to post</h1>';
+}
+</script>
+<script src="app.js"></script>
+<script>
+let canWrite = true;
+let canRead = true;
+</script>
+<style>
+body{
+    color: black;
+    overflow: hidden;
+}
+#pagecontent{
+    width: 100%;
+
+}
+aside{
+    height: calc(100vh - 1.0em);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    width: 4em;
+    background-color: rgb(26, 26, 26);
+    padding-top: 1em;
+    z-index: 2;
+}
+</style>
+<script>
+    const auth = firebase.auth();
+    function getCookie(name) {
+        const cookieValue = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
+        return cookieValue ? cookieValue.pop() : null;
+    }
+    const usersname = getCookie('username');
+    if(!usersname){
+      const userb = document.querySelector('#userButton');
+      userb.style.cursor = 'not-allowed';
+    }
+    </script>
+    <script>
+    let menuOpened = false;
+    
+    function accountMenu() {
+        const usermenu = document.querySelector('#usermenu');
+        const usersname = getCookie('username');
+    
+        if (usersname) {
+            if (menuOpened == false) {
+                menuOpened = true;
+                usermenu.classList.remove('hidden');
+                // Attach the click event listener to the document to handle clicks outside the menu
+                document.addEventListener('click', handleDocumentClick);
+            } else if (menuOpened == true) {
+                menuOpened = false;
+                usermenu.classList.add('hidden');
+                // Remove the click event listener from the document
+                document.removeEventListener('click', handleDocumentClick);
+            }
+        }
+    }
+    
+    function handleDocumentClick(event) {
+        const targetElement = event.target;
+        const usermenu = document.querySelector('#usermenu');
+        // Check if the clicked element is not part of the account menu
+        if (!usermenu.contains(targetElement) && !document.querySelector('#userButton').contains(targetElement)) {
+            // Close the account menu
+            usermenu.classList.add('hidden');
+            // Remove the click event listener from the document
+            document.removeEventListener('click', handleDocumentClick);
+            // Reset menuOpened state
+            menuOpened = false;
+        }
+    }
+    const userButton = document.getElementById('userButton');
+    userButton.addEventListener('click', accountMenu);
+</script>
+<script>
+    function setup() {
+        const userDiv = document.querySelector('.user');
+        const profileURL = decodeURIComponent(getCookie("profileURL"));
+    
+        if (profileURL) {
+            // If profileURL cookie is found, set the userDiv content to an image
+            userDiv.innerHTML = `<img src="${profileURL}">`;
+        } else {
+            // If profileURL cookie is not found, set the userDiv content to a question mark
+            userDiv.innerHTML = '<span style="font-size: 28px;">?</span>';
+        }
+    }
+setup();
+</script>
