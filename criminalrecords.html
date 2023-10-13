@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
+      <script type="module">
+          // Import the functions you need from the SDKs you need
+          import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+          import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-analytics.js";
+          // TODO: Add SDKs for Firebase products that you want to use
+          // https://firebase.google.com/docs/web/setup#available-libraries
+        
+          // Your web app's Firebase configuration
+          // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+          
+      </script>
+    <link rel="stylesheet" href="dark_mode.css" id="stylesheet">
+    <link rel="icon"
+        href="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/favicon.ico?alt=media&token=30a65c76-0379-471a-9846-002c00d3446c&_gl=1*16mtdvn*_ga*MTE5MjkyMDYwMi4xNjk2NzM1MjM1*_ga_CW55HF8NVT*MTY5Njc0NjQ4NS4yLjEuMTY5Njc0OTk5OC42MC4wLjA.">
+    <title>7D+ Criminal Records</title>
+</head>
+
+<body>
+    <div id="rowflex">
+        <aside>
+            <div id="centerx">
+                <div class="button tooltip" data-tooltip="Switch Themes" id="webthemes" onclick="switchThemes();">
+                    <!-- JS puts button here -->
+                </div>
+            </div>
+            <div id="centerx">
+                <div class="button tooltip" data-tooltip="Home page" onclick="window.location.replace('index.html')">
+                    <img
+                        src="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/homepage.png?alt=media&token=2dabae14-6270-4f37-8c19-16ca4e246dc1"
+                        id="themeimg">
+                </div>
+            </div>
+
+            <div id="centerx">
+                <div class="button tooltip" data-tooltip="About 7D" id="webthemes"
+                    onclick="window.location.replace('about.html')">
+                    <img
+                        src="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/info.png?alt=media&token=b06d9917-e385-4dd3-9a38-3447ea028d2f"
+                        id="themeimg">
+                </div>
+            </div>
+            <div id="centerx">
+                <div class="button tooltip" data-tooltip="Criminal Records" id="webthemes">
+                    <img
+                        src="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/criminal-record.png?alt=media&token=a44131f6-563e-4bbb-bf67-6f4bda13662c"
+                        id="themeimg">
+                </div>
+            </div>
+            <div id="userButton" style="position: absolute; bottom: 1em; width: 4em; height: 4em; cursor: pointer;">
+                <div style="flex-direction: column;">
+                    <center>
+                        <div class="user"><span style="font-size: 28px;">?</span></div>
+                        <span>Me</span>
+                    </center>
+                </div>
+            </div>
+        </aside>
+        <main>
+            <center>
+                <h1>7D Criminal Records</h1>
+            </center>
+            <center>
+                <h3>Search up terrible things we did!</h3>
+            </center>
+            <hr width="45%">
+            <br>
+            <center>
+                <select id="peopleSelect">
+                </select>
+            </center>
+            <div id="recorddisplay">
+            </div>
+        </main>
+    </div>
+</body>
+<div id="usermenu" class="hidden">
+    <button onclick="logout()" style="border: none; border-bottom: 2px solid black; width: 100%; height: 2em; background-color: rgba(84, 84, 84, 0.777); cursor: pointer; border-top-right-radius: 15px;">Log out</button>
+  </div>
+</html>
+
+<script>
+    // Function to set a cookie
+    function setCookie(name, value, days) {
+        const expires = new Date();
+        expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+        document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+    }
+    
+    // Function to get a cookie value by name
+    function getCookie(name) {
+        const cookieValue = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
+        return cookieValue ? cookieValue.pop() : null;
+    }
+    
+    const setmode = document.getElementById('stylesheet');
+    const themebutton = document.getElementById('webthemes');
+    const lightbutton = `<img src="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/brightness.png?alt=media&token=470052b1-4073-486a-bc31-7174b43143e1&_gl=1*n7joeq*_ga*MTE5MjkyMDYwMi4xNjk2NzM1MjM1*_ga_CW55HF8NVT*MTY5Njc0NjQ4NS4yLjEuMTY5Njc0OTk1My4zNi4wLjA." id="themeimg"></img>`;
+    const darkbutton = `<img src="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/moon.png?alt=media&token=8124b6de-6a2d-436e-9d9e-b291e7ce6d35&_gl=1*hlz1b7*_ga*MTE5MjkyMDYwMi4xNjk2NzM1MjM1*_ga_CW55HF8NVT*MTY5Njc0NjQ4NS4yLjEuMTY5Njc0OTk4NC41LjAuMA.." id="themeimg"></img>`;
+    let currenttheme = getCookie('theme') || 'dark';
+    
+    // Set initial theme based on the cookie value
+    if (currenttheme === 'light') {
+        themebutton.innerHTML = darkbutton;
+        setmode.href = 'light_mode.css';
+    } else {
+        themebutton.innerHTML = lightbutton;
+        setmode.href = 'dark_mode.css';
+    }
+    
+    function switchThemes() {
+        if (currenttheme === 'dark') {
+            currenttheme = 'light';
+            themebutton.innerHTML = darkbutton;
+            setmode.href = 'light_mode.css';
+        } else {
+            currenttheme = 'dark';
+            themebutton.innerHTML = lightbutton;
+            setmode.href = 'dark_mode.css';
+        }
+    
+        // Update the cookie value when theme changes
+        setCookie('theme', currenttheme, 365); // Cookie expires in 365 days
+    }
+</script>
+<script>
+// Get the select element by its ID
+const selectElement = document.getElementById('peopleSelect');
+
+// Define an array of options you want to add
+const options = ['----------', 'Aysz', 'Bhumpat', 'Chatpatai', ' Hideto', ' Janaryn', 'Kasiphon', 'Nattanicha', 'Ornakamanee', 'Pattarin', ' Peephum', 'Phimpisa', 'Pitsupa', 'Praowtawan', 'Punnawat', 'Punnika', 'Sirinapa', 'Supisara', 'Tanapat', 'Thanut', 'Tullawas', 'Voraphat'];
+
+// Function to add options to the select element
+function addOptionsToSelect(optionsArray) {
+    // Loop through the options array and create option elements
+    optionsArray.forEach(optionText => {
+        // Create a new option element
+        const option = document.createElement('option');
+        
+        // Set the text of the option to the current element from the array
+        option.textContent = optionText;
+        
+        // Append the option element to the select element
+        selectElement.appendChild(option);
+    });
+}
+
+// Call the function with the options array to add options to the select element
+addOptionsToSelect(options);
+</script>
+<script>
+const firebaseConfig = {
+        apiKey: "AIzaSyDdFScIQmSXRjr9Scx8ItcYZAd0KW-ha68",
+        authDomain: "dplus-41108.firebaseapp.com",
+        projectId: "dplus-41108",
+        storageBucket: "dplus-41108.appspot.com",
+        messagingSenderId: "1027127970741",
+        appId: "1:1027127970741:web:afb0ba337bc1b953f6a7fc",
+        measurementId: "G-38DZ5DW0EJ"
+      };
+const passhashed = "134e04412ac0ab72e6d30f49fe086964";
+      // Initialize Firebasefirebase.initializeApp(firebaseConfig);
+      const firebaseApp = firebase.initializeApp(firebaseConfig);
+      const db = firebaseApp.firestore();
+
+      const peopleSelect = document.getElementById('peopleSelect');
+const recordDisplay = document.getElementById('recorddisplay');
+const ageSpan = document.createElement('span');
+const nameSpan = document.createElement('span');
+const table = document.createElement('table');
+const noDataMessage = document.createElement('h1');
+noDataMessage.textContent = 'No data';
+noDataMessage.style.display = 'none'; // Hide the message initially
+
+recordDisplay.appendChild(document.createElement('br'));
+recordDisplay.appendChild(nameSpan);
+recordDisplay.appendChild(document.createElement('br'));
+recordDisplay.appendChild(ageSpan);
+recordDisplay.appendChild(document.createElement('br'));
+recordDisplay.appendChild(document.createElement('br'));
+recordDisplay.appendChild(table);
+recordDisplay.appendChild(noDataMessage);
+table.style.display = 'none';
+noDataMessage.style.display = 'block';
+
+peopleSelect.addEventListener('change', (event) => {
+    const selectedPersonId = event.target.value;
+    nameSpan.textcontent = "";
+    ageSpan.textcontent = ""; 
+
+    if (selectedPersonId) {
+        const docRef = db.collection('criminalRecords').doc(selectedPersonId);
+        docRef.get().then((doc) => {
+            if (doc.exists) {
+                const data = doc.data();
+                ageSpan.textContent = `Age: ${data.age}`;
+                nameSpan.textContent = `Name: ${data.name}`;
+
+                const record = data.record;
+                table.innerHTML = ''; // Clear previous table rows
+
+                const headersRow = table.insertRow();
+                const timeHeaderCell = headersRow.insertCell();
+                const recordHeaderCell = headersRow.insertCell();
+                timeHeaderCell.textContent = 'Time';
+                recordHeaderCell.textContent = 'Record';
+                timeHeaderCell.classList.add('blue');
+                recordHeaderCell.classList.add('blue');
+                for (const arrayName in record) {
+                    const array = record[arrayName];
+                    const row = table.insertRow();
+                    const timestampCell = row.insertCell();
+                    const textCell = row.insertCell();
+
+                    // Assuming the first item in the array is a Firestore timestamp object
+                    const timestamp = new Date(array[0].seconds * 1000 + array[0].nanoseconds / 1e6);
+                    timestampCell.textContent = timestamp.toLocaleString();
+
+                    // Assuming the second item in the array is text
+                    textCell.textContent = array[1];
+                }
+
+                // Show the table and hide the "No data" message
+
+                
+                table.style.display = 'table';
+                noDataMessage.style.display = 'none';
+            } else {
+                // User not found, display "No data" message and hide the table
+                nameSpan.textcontent = "";
+                ageSpan.textcontent = ""; 
+                table.style.display = 'none';
+                noDataMessage.style.display = 'block';
+            }
+        }).catch((error) => {
+            console.log('Error getting document:', error);
+        });
+    } else {
+        // Clear the display if no person is selected
+        ageSpan.textContent = '';
+        nameSpan.textContent = '';
+        table.innerHTML = '';
+        // Show the "No data" message and hide the table
+        table.style.display = 'none';
+        noDataMessage.style.display = 'block';
+    }
+});
+peopleSelect.addEventListener('change', (event) => {
+    const selectedPersonId = event.target.value;
+
+    // Clear nameSpan and ageSpan
+    nameSpan.textContent = "";
+    ageSpan.textContent = ""; 
+
+    if (selectedPersonId) {
+        const docRef = db.collection('criminalRecords').doc(selectedPersonId);
+        docRef.get().then((doc) => {
+            // ... (rest of your code)
+        }).catch((error) => {
+            console.log('Error getting document:', error);
+        });
+    } else {
+        // Clear the display if no person is selected
+        ageSpan.textContent = '';
+        nameSpan.textContent = '';
+        table.innerHTML = '';
+        // Show the "No data" message and hide the table
+        table.style.display = 'none';
+        noDataMessage.style.display = 'block';
+    }
+});
+
+</script>
+<script>
+    const auth = firebase.auth();
+    function getCookie(name) {
+        const cookieValue = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
+        return cookieValue ? cookieValue.pop() : null;
+    }
+    function logout(){
+      auth.signOut().then(() => {
+          document.cookie = 'username=; expires=Thu, 01 Jan 1970 00:00:10 GMT;';
+          document.cookie = 'profileURL=; expires=Thu, 01 Jan 1970 00:00:10 GMT;';
+          window.location.reload();
+        }).catch((error) => {
+            alert('A bug ate the function. Try again later.');
+        });
+    }
+    const usersname = getCookie('username');
+    if(!usersname){
+      const userb = document.querySelector('#userButton');
+      userb.style.cursor = 'not-allowed';
+    }
+</script>
+<script>
+    let menuOpened = false;
+    
+    function accountMenu() {
+        const usermenu = document.querySelector('#usermenu');
+        const usersname = getCookie('username');
+    
+        if (usersname) {
+            if (menuOpened == false) {
+                menuOpened = true;
+                usermenu.classList.remove('hidden');
+                // Attach the click event listener to the document to handle clicks outside the menu
+                document.addEventListener('click', handleDocumentClick);
+            } else if (menuOpened == true) {
+                menuOpened = false;
+                usermenu.classList.add('hidden');
+                // Remove the click event listener from the document
+                document.removeEventListener('click', handleDocumentClick);
+            }
+        }
+    }
+    
+    function handleDocumentClick(event) {
+        const targetElement = event.target;
+        const usermenu = document.querySelector('#usermenu');
+        // Check if the clicked element is not part of the account menu
+        if (!usermenu.contains(targetElement) && !document.querySelector('#userButton').contains(targetElement)) {
+            // Close the account menu
+            usermenu.classList.add('hidden');
+            // Remove the click event listener from the document
+            document.removeEventListener('click', handleDocumentClick);
+            // Reset menuOpened state
+            menuOpened = false;
+        }
+    }
+    const userButton = document.getElementById('userButton');
+    userButton.addEventListener('click', accountMenu);
+function setup() {
+    const userDiv = document.querySelector('.user');
+    const profileURL = decodeURIComponent(getCookie("profileURL"));
+
+    if (profileURL) {
+        // If profileURL cookie is found, set the userDiv content to an image
+        userDiv.innerHTML = `<img src="${profileURL}">`;
+    } else {
+        // If profileURL cookie is not found, set the userDiv content to a question mark
+        userDiv.innerHTML = '<span style="font-size: 28px;">?</span>';
+    }
+}
+setup(  )
+</script>

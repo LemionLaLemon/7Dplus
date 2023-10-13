@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
       <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
       <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
       <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
@@ -32,24 +33,21 @@
             </div>
             <div id="centerx">
                 <div class="button tooltip" data-tooltip="Home page" onclick="window.location.replace('index.html')">
-                    <img
-                        src="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/homepage.png?alt=media&token=2dabae14-6270-4f37-8c19-16ca4e246dc1"
+                    <img src="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/homepage.png?alt=media&token=2dabae14-6270-4f37-8c19-16ca4e246dc1"
                         id="themeimg">
                 </div>
             </div>
             <div id="centerx">
                 <div class="button tooltip" data-tooltip="About 7D" id="webthemes"
                     onclick="window.location.replace('about.html')">
-                    <img
-                        src="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/info.png?alt=media&token=b06d9917-e385-4dd3-9a38-3447ea028d2f"
+                    <img src="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/info.png?alt=media&token=b06d9917-e385-4dd3-9a38-3447ea028d2f"
                         id="themeimg">
                 </div>
             </div>
             <div id="centerx">
                 <div class="button tooltip" data-tooltip="Criminal Records"
                     onclick="window.location.replace('criminalrecords.html')">
-                    <img
-                        src="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/criminal-record.png?alt=media&token=a44131f6-563e-4bbb-bf67-6f4bda13662c"
+                    <img src="https://firebasestorage.googleapis.com/v0/b/dplus-41108.appspot.com/o/criminal-record.png?alt=media&token=a44131f6-563e-4bbb-bf67-6f4bda13662c"
                         id="themeimg">
                 </div>
             </div>
@@ -64,93 +62,23 @@
         </aside>
         <main>
             <center>
-                <h1>7D plus</h1>
+                <h1>What are we?</h1>
             </center>
             <center>
-                <h3>The platform for !{ERROR}</h3>
+                <h3>I made this page for myself, seriously.</h3>
             </center>
             <hr width="45%">
             <br>
-            <div style="display: flex; flex-direction: row; justify-content: center;">
-                <div class="button" onclick="openSignupForm()">Sign up</div>
-                <div class="button" onclick="openLoginForm()">Log in</div>
-            </div>
+            <center>
+                <img src="images/I_dont_like_hair-peephum.jpg" style="height: 350px; width: auto;"><br>
+                <span>We are kindergarteners.</span>
+            </center>
         </main>
     </div>
     <div id="usermenu" class="hidden">
-      <button onclick="logout()" style="border: none; border-bottom: 2px solid black; width: 100%; height: 2em; background-color: rgba(84, 84, 84, 0.777); cursor: pointer; border-top-right-radius: 15px;">Log out</button>
+        <button onclick="logout()" style="border: none; border-bottom: 2px solid black; width: 100%; height: 2em; background-color: rgba(84, 84, 84, 0.777); cursor: pointer; border-top-right-radius: 15px;">Log out</button>
     </div>
 </body>
-<script>
-const firebaseConfig = {
-        apiKey: "AIzaSyDdFScIQmSXRjr9Scx8ItcYZAd0KW-ha68",
-        authDomain: "dplus-41108.firebaseapp.com",
-        projectId: "dplus-41108",
-        storageBucket: "dplus-41108.appspot.com",
-        messagingSenderId: "1027127970741",
-        appId: "1:1027127970741:web:afb0ba337bc1b953f6a7fc",
-        measurementId: "G-38DZ5DW0EJ"
-};
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-
-const auth = firebase.auth();
-function getCookie(name) {
-    const cookieValue = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
-    return cookieValue ? cookieValue.pop() : null;
-}
-function logout(){
-  auth.signOut().then(() => {
-      document.cookie = 'username=; expires=Thu, 01 Jan 1970 00:00:10 GMT;';
-      document.cookie = 'profileURL=; expires=Thu, 01 Jan 1970 00:00:10 GMT;';
-      window.location.reload();
-    }).catch((error) => {
-        alert('A bug ate the function. Try again later.');
-    });
-}
-const usersname = getCookie('username');
-if(!usersname){
-  const userb = document.querySelector('#userButton');
-  userb.style.cursor = 'not-allowed';
-}
-</script>
-<script>
-let menuOpened = false;
-
-function accountMenu() {
-    const usermenu = document.querySelector('#usermenu');
-    const usersname = getCookie('username');
-
-    if (usersname) {
-        if (menuOpened == false) {
-            menuOpened = true;
-            usermenu.classList.remove('hidden');
-            // Attach the click event listener to the document to handle clicks outside the menu
-            document.addEventListener('click', handleDocumentClick);
-        } else if (menuOpened == true) {
-            menuOpened = false;
-            usermenu.classList.add('hidden');
-            // Remove the click event listener from the document
-            document.removeEventListener('click', handleDocumentClick);
-        }
-    }
-}
-
-function handleDocumentClick(event) {
-    const targetElement = event.target;
-    const usermenu = document.querySelector('#usermenu');
-    // Check if the clicked element is not part of the account menu
-    if (!usermenu.contains(targetElement) && !document.querySelector('#userButton').contains(targetElement)) {
-        // Close the account menu
-        usermenu.classList.add('hidden');
-        // Remove the click event listener from the document
-        document.removeEventListener('click', handleDocumentClick);
-        // Reset menuOpened state
-        menuOpened = false;
-    }
-}
-const userButton = document.getElementById('userButton');
-userButton.addEventListener('click', accountMenu);
-</script>
 <script>
 // Function to set a cookie
 function setCookie(name, value, days) {
@@ -196,17 +124,78 @@ function switchThemes() {
 }
 </script>
 <script>
-function openSignupForm(){
-  var signupWindow = window.open('signup.html', '_blank', 'width=400,height=350');
-}
-function openLoginForm(){
-  var loginWindow = window.open('login.html', '_blank', 'width=400, height=350');
-}
+    const firebaseConfig = {
+            apiKey: "AIzaSyDdFScIQmSXRjr9Scx8ItcYZAd0KW-ha68",
+            authDomain: "dplus-41108.firebaseapp.com",
+            projectId: "dplus-41108",
+            storageBucket: "dplus-41108.appspot.com",
+            messagingSenderId: "1027127970741",
+            appId: "1:1027127970741:web:afb0ba337bc1b953f6a7fc",
+            measurementId: "G-38DZ5DW0EJ"
+    };
+    const firebaseApp = firebase.initializeApp(firebaseConfig);
+    
+    const auth = firebase.auth();
+    function getCookie(name) {
+        const cookieValue = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
+        return cookieValue ? cookieValue.pop() : null;
+    }
+    function logout(){
+      auth.signOut().then(() => {
+          document.cookie = 'username=; expires=Thu, 01 Jan 1970 00:00:10 GMT;';
+          document.cookie = 'profileURL=; expires=Thu, 01 Jan 1970 00:00:10 GMT;';
+          window.location.reload();
+        }).catch((error) => {
+            alert('A bug ate the function. Try again later.');
+        });
+    }
+    const usersname = getCookie('username');
+    if(!usersname){
+      const userb = document.querySelector('#userButton');
+      userb.style.cursor = 'not-allowed';
+    }
 </script>
 <script>
+    let menuOpened = false;
+    
+    function accountMenu() {
+        const usermenu = document.querySelector('#usermenu');
+        const usersname = getCookie('username');
+    
+        if (usersname) {
+            if (menuOpened == false) {
+                menuOpened = true;
+                usermenu.classList.remove('hidden');
+                // Attach the click event listener to the document to handle clicks outside the menu
+                document.addEventListener('click', handleDocumentClick);
+            } else if (menuOpened == true) {
+                menuOpened = false;
+                usermenu.classList.add('hidden');
+                // Remove the click event listener from the document
+                document.removeEventListener('click', handleDocumentClick);
+            }
+        }
+    }
+    
+    function handleDocumentClick(event) {
+        const targetElement = event.target;
+        const usermenu = document.querySelector('#usermenu');
+        // Check if the clicked element is not part of the account menu
+        if (!usermenu.contains(targetElement) && !document.querySelector('#userButton').contains(targetElement)) {
+            // Close the account menu
+            usermenu.classList.add('hidden');
+            // Remove the click event listener from the document
+            document.removeEventListener('click', handleDocumentClick);
+            // Reset menuOpened state
+            menuOpened = false;
+        }
+    }
+    const userButton = document.getElementById('userButton');
+    userButton.addEventListener('click', accountMenu);
+    
 function setup() {
     const userDiv = document.querySelector('.user');
-    const profileURL = getCookie2("profileURL");
+    const profileURL = decodeURIComponent(getCookie("profileURL"));
 
     if (profileURL) {
         // If profileURL cookie is found, set the userDiv content to an image
@@ -216,24 +205,6 @@ function setup() {
         userDiv.innerHTML = '<span style="font-size: 28px;">?</span>';
     }
 }
-
-function getCookie2(name) {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.startsWith(name + '=')) {
-            return decodeURIComponent(cookie.substring(name.length + 1));
-        }
-    }
-    return null;
-}
 setup()
-</script>
-<script>
-function ProcessChildMessage(message) {
-  if(message == 'reload'){
-    window.location.reload();
-  }
-}
 </script>
 </html>
